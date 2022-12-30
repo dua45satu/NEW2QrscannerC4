@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.qrscannerc4</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">android.content.Intent</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.View</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.Button</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.TextView</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.google.zxing.integration.android.IntentIntegrator</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.google.zxing.integration.android.IntentResult</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">org.json.JSONException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">org.json.JSONObject</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.jar.JarException</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity {</span>
+    <span class="s2">//view object</span>
+    <span class="s0">private </span><span class="s1">Button buttonScanning</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">TextView textViewName</span><span class="s0">, </span><span class="s1">textViewClass</span><span class="s0">, </span><span class="s1">textViewId</span><span class="s0">;</span>
+
+    <span class="s2">//qrcode scanner object</span>
+    <span class="s0">private </span><span class="s1">IntentIntegrator qrscan</span><span class="s0">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle saveInstanceState){</span>
+        <span class="s0">super</span><span class="s1">.onCreate(saveInstanceState)</span><span class="s0">;</span>
+        <span class="s1">setContentView(R.id..layout.activity_main)</span><span class="s0">;</span>
+        <span class="s2">//view object</span>
+        <span class="s1">buttonScanning = (Button) findViewById(R.id.buttonscan)</span><span class="s0">;</span>
+        <span class="s1">textViewName = (TextView) findViewById(R.id.textViewNama)</span><span class="s0">;</span>
+        <span class="s1">textViewClass = (TextView) findViewById(R.id.textViewKelas)</span><span class="s0">;</span>
+        <span class="s1">textViewId = (TextView) findViewById(R.id.TextViewNim)</span><span class="s0">;</span>
+
+        <span class="s1">qrscan = </span><span class="s0">new </span><span class="s1">IntentIntegrator(</span><span class="s0">this</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">buttonScanning.setOnClickListener()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onActivityResult(</span><span class="s0">int </span><span class="s1">requestCode</span><span class="s0">, int </span><span class="s1">resultCode</span><span class="s0">, </span><span class="s1">Intent data){</span>
+        <span class="s1">IntentResult result = IntentIntegrator.parseActivityResult(requestCode</span><span class="s0">,</span><span class="s1">resultCode</span><span class="s0">,</span><span class="s1">data)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(result!=</span><span class="s0">null</span><span class="s1">) {</span>
+            <span class="s2">//jika hasil scanner tidak sama sekali</span>
+            <span class="s0">if </span><span class="s1">(result.getContents()== </span><span class="s0">null</span><span class="s1">){</span>
+                <span class="s1">Toast.makeText(</span><span class="s0">this,  </span><span class="s3">&quot;Hasil scan tidak ada&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_LONG).show()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">else</span><span class="s1">{</span>
+
+                <span class="s0">try </span><span class="s1">{</span>
+                    <span class="s1">JSONObject obj = </span><span class="s0">new </span><span class="s1">JSONObject(result.getContents())</span><span class="s0">;</span>
+
+                    <span class="s1">textViewName.setText(obj.getString(</span><span class="s3">&quot;nama&quot;</span><span class="s1">))</span><span class="s0">;</span>
+                    <span class="s1">textViewClass.setText(obj.getString(</span><span class="s3">&quot;kelas&quot;</span><span class="s1">))</span><span class="s0">;</span>
+                    <span class="s1">textViewId.setText(obj.getString(</span><span class="s3">&quot;NIM&quot;</span><span class="s1">))</span><span class="s0">;</span>
+                <span class="s1">}</span><span class="s0">catch </span><span class="s1">(JSONException e){</span>
+                    <span class="s1">e.printStackTrace()</span><span class="s0">;</span>
+                    <span class="s1">Toast.makeText(</span><span class="s0">this, </span><span class="s1">result.getContents()</span><span class="s0">,</span><span class="s1">Toast.LENGTH_LONG).show()</span><span class="s0">;</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+            <span class="s0">super</span><span class="s1">.onActivityResult(requestCode</span><span class="s0">, </span><span class="s1">resultCode</span><span class="s0">, </span><span class="s1">data)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+</pre>
+</body>
+</html>
